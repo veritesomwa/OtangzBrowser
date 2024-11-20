@@ -1,0 +1,5 @@
+{
+    "theme": "light",
+    "dark_mode_css": "materialdark.css",
+    "light_mode_css": "materiallight.css"
+}

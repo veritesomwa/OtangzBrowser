@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
+* {
+  font-family: "Roboto", sans-serif;
+  background-color: #555;
+}
+
+#tabbarContainer {
+  background: #222;
+  border-bottom: 7px solid #111;
+}
+#menyItems {
+  background-color: #222;
+  margin-top: 10px;
+  color: #f1f1f1;
+}
+#menyItems:hover {
+  background-color: rgba(0, 0, 0, 0.56);
+}
+QPushButton {
+  border: none;
+  background: transparent;
+  padding: 10px;
+  transition: bg 0.5s;
+}
+#btnMenuExit {
+  background-color: transparent;
+  font-size: 30px;
+  cursor: pointer;
+  color: #ee6666;
+  /* width: 20px;
+  height: 20px; */
+}
+
+#btnMenuExit:hover {
+  color: #333;
+}
+#sidemenu {
+  background-color: #333;
+  border: 2px solid #222;
+}
+
+#titletool {
+  background-color: #444;
+}
+
+QLabel {
+  background: transparent;
+}
+
+#titleMenuSettings {
+  color: #fff;
+  font-size: 20px;
+  font-family: monospace;
+}
+
+#btnControl {
+  border-radius: 15px;
+}
+
+QPushButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+QLineEdit {
+  background: #333;
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+  font-size: 14px;
+  color: #f1f1f1;
+}
+
+QTabBar {
+  background: #333;
+  border: none !important;
+  border-bottom: 2px solid #222;
+  border-bottom: 2px solid #222;
+}
+
+QTabBar::tab {
+  padding: 10px;
+  border: none;
+  background: transparent;
+  padding-left: 20px;
+  padding-right: 10px;
+}
+
+QTabBar::tab QPushButton {
+  border: initial;
+  background: initial;
+  padding: initial;
+  transition: bg 0.5s;
+  color: #f1f1f1;
+}
+
+#btnAddTab {
+  background: rgba(225, 225, 225, 0.05);
+  color: #f1f1f1;
+}
+#btnAddTab:hover {
+  background: #deb1e7;
+}
+
+QTabBar::tab:selected {
+  border-left: 1px solid #222;
+  border-right: 1px solid #222;
+  background: #333;
+  color: #f1f1f1;
+  padding-left: 10px;
+}
+
+/* QTabBar::tab:!selected {
+    padding-left:10px;
+    border-right:1px solid #ddd;
+} */
+
+QWidget#toolbar {
+  background: #333;
+  border-bottom: 0px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
+}
+
+#BrowserWindow {
+  border: 1px solid #888 !important;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+QWebEngineView,
+#TabView {
+  height: 900px;
+}
+
+QTabBar::tab {
+  border: none !important;
+  margin: 0px;
+  padding: 10px;
+  text-align: left !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: #666;
+  width: 200px;
+  padding-left: 0px;
+}
+
+#TabBar::close-button {
+  border-image: url("icons/ic_clear_black_24px.svg") 0 0 0 0 stretch stretch;
+  height: 15px;
+  width: 15px;
+  padding: 10px;
+  padding-left: -20px;
+}
+
+QWidget#TabControls {
+  border-bottom: 2px solid #111;
+  background: #222;
+  padding-bottom: 15px;
+}
