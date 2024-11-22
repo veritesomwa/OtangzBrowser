@@ -9,6 +9,7 @@ from PyQt5.QtCore import Qt, QUrl, QProcess
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineDownloadItem
 
+# AddressBar: tool for toolbar.
 class AddressBar(QLineEdit):
     def __init__(self):
         super().__init__()
@@ -35,7 +36,7 @@ class App(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
 
-
+        # Left Panel
         self.leftLayout = QVBoxLayout()
         self.leftLayout.setSpacing(0)
         self.leftLayout.setContentsMargins(0, 0, 0, 0)
@@ -67,6 +68,7 @@ class App(QFrame):
         self.sidemenuExitButton.clicked.connect(self.toggleMenu)
         
 
+        # Title Menu Bar
         self.titletool = QWidget()
         self.titletool.setObjectName("titletool")
         self.titletool.layout = QHBoxLayout()
@@ -76,8 +78,10 @@ class App(QFrame):
         
         self.titletool.setLayout(self.titletool.layout)
         
-
+        # Adding the titletool to the sidemenulayout
         self.sidemenuLayout.addWidget(self.titletool)
+
+
         self.settings = QPushButton("Settings")
         self.settings.setObjectName("menyItems")
         self.gotoDownloads = QPushButton("Downloads")
@@ -96,6 +100,7 @@ class App(QFrame):
 
         self.switchTheme.clicked.connect(self.ToggleTheme)
 
+        # Adding options to the sidemenu
         self.sidemenuLayout.addWidget(self.settings)
         self.sidemenuLayout.addWidget(self.switchTheme)
         self.sidemenuLayout.addWidget(self.gotoDownloads)
@@ -123,17 +128,20 @@ class App(QFrame):
         self.tabbar = QTabBar(tabsClosable=True, movable=True)
         self.tabbar.setExpanding(False)
         self.tabbar.setElideMode(Qt.ElideLeft)
+        # Tabber Events
         self.tabbar.tabCloseRequested.connect(self.closeTab)
         self.tabbar.tabBarClicked.connect(self.SwitchTab)
         self.tabbar.setObjectName("TabBar")
 
+        # Creating a add tab button
         self.btnAddTab = QPushButton()
         self.btnAddTab.setIcon(QIcon("icons/ic_add_black_24px.svg"))
+        # btnAddTab event handler
         self.btnAddTab.clicked.connect(self.AddTab)
         self.btnAddTab.setObjectName("btnAddTab")
 
         self.tabbarContainerLayout.addWidget(self.tabbar)
-        self.tabbarContainerLayout.addStretch(1)
+        self.tabbarContainerLayout.addStretch(1) # All the layouts are using flex. stretch 1 pushes the addtab button to the right end 
         self.tabbarContainerLayout.addWidget(self.btnAddTab)
         self.tabbarContainer.setLayout(self.tabbarContainerLayout)
 
@@ -183,41 +191,52 @@ class App(QFrame):
         self.layout.addLayout(self.rightLayout)
         self.setLayout(self.layout)
 
+        # Called the addTab method so a new tab is created when the program opens
         self.AddTab()
 
         self.show()
 
     def AddTab(self):
-        i = self.tab_count
+        i = self.tab_count  # intitally the number of tabs: 0.
 
+        # Create a new tab
         self.tabs.append(QWidget())
+
+        # Set the tab's properties and layout
         self.tabs[i].setObjectName("tab" + str(i))
         self.tabs[i].layout = QHBoxLayout()
         self.tabs[i].layout.setContentsMargins(0, 0, 0, 0)
 
+        # Creating the Web Page
         self.tabs[i].content = QWebEngineView()
         self.tabs[i].content.load(QUrl().fromUserInput("http://www.google.com"))
         self.tabs[i].content.page().profile().downloadRequested.connect(self.handleDownload)
 
-
+        # Event handlers for the web page
         self.tabs[i].content.titleChanged.connect(lambda: self.getTitle(i))
         self.tabs[i].content.iconChanged.connect(lambda: self.getIcon(i))
         self.tabs[i].content.urlChanged.connect(lambda: self.updateAddressbar(i))
 
+        # Adding Content page each of its on created layout. 
         self.tabs[i].layout.addWidget(self.tabs[i].content)
         self.tabs[i].setLayout(self.tabs[i].layout)
 
+        # Add the tab to the container layout (the QStackedLayout from above.) and set the current tab
         self.container_layout.addWidget(self.tabs[i])
         self.container_layout.setCurrentWidget(self.tabs[i])
         self.container_layout.setCurrentIndex(i)
 
+        # Add the tab to the tabbar
         self.tabbar.addTab("New Tab")
         self.tabbar.setCurrentIndex(i)
+        # Adding some tab unique data to reference it in the future.
         self.tabbar.setTabData(i, "tab" + str(i))
 
+        # increase the tab count, Having keep track of how many tabs are available.
         self.tab_count += 1
 
     def closeTab(self, i):
+        # Getting tab data.
         tab_data = self.tabbar.tabData(i)
         tab_content = self.findChild(QWidget, tab_data)
         if tab_content is not None:
@@ -243,24 +262,29 @@ class App(QFrame):
                     self.AddTab()
 
     def SwitchTab(self, i):
+        # Code to switch tabs
+        
         if self.tabs[i]:
             self.container_layout.setCurrentWidget(self.tabs[i])
             url = self.tabs[i].content.url()
             self.addressbar.setText(url.toString())
 
     def getTitle(self, i):
+        # Getting the title of the tabbar and displaying it
         tab_data = self.tabbar.tabData(i)
         tab_content = self.findChild(QWidget, tab_data)
         title = tab_content.content.title()
         self.tabbar.setTabText(i, title)
 
     def getIcon(self, i):
+        # Getting the icon of the tabbar and displaying it
         tab_data = self.tabbar.tabData(i)
         tab_content = self.findChild(QWidget, tab_data)
         icon = tab_content.content.icon()
         self.tabbar.setTabIcon(i, icon)
 
     def updateAddressbar(self, i, url=None):
+        # Updating the address bar with the current url
         if url is None:
             tab_data = self.tabbar.tabData(i)
             tab_content = self.findChild(QWidget, tab_data)
@@ -268,6 +292,7 @@ class App(QFrame):
         self.addressbar.setText(url.toString())
 
     def goBack(self):
+        # Code to go back to the previous page
         i = self.tabbar.currentIndex()
         if i >= 0:
             tab_content = self.tabs[i].content
@@ -275,6 +300,7 @@ class App(QFrame):
                 tab_content.back()
 
     def goForward(self):
+        # Code to go forward to the next page
         i = self.tabbar.currentIndex()
         if i >= 0:
             tab_content = self.tabs[i].content
@@ -282,12 +308,14 @@ class App(QFrame):
                 tab_content.forward()
 
     def refresh(self):
+        # Code to refresh the current page
         i = self.tabbar.currentIndex()
         if i >= 0:
             tab_content = self.tabs[i].content
             tab_content.reload()
 
     def BrowseTo(self):
+        # Browse to the entered URL in the address bar
         text = self.addressbar.text()
         url = ""
         if 'http' not in text:
@@ -329,12 +357,14 @@ class App(QFrame):
         self.hideURLTooltip()
 
     def toggleMenu(self):
+        # Toggle the side menu visibility
         if self.sidemenu.isVisible() ==  True:
             self.sidemenu.setVisible(False)
         else:
             self.sidemenu.setVisible(True)
 
     def ToggleTheme(self):
+        # Toggle the application theme.
         try:
             with open("theme_config.json", "r") as file:
                 config = json.load(file)
